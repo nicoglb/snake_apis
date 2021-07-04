@@ -1,0 +1,153 @@
+openapi: '3.0.2'
+info:
+  title: Snake
+  version: '1.0'
+servers:
+  - url: http://localhost:3000/v1
+tags:
+  - name: User
+components:
+  schemas:
+    user:
+      type: object
+      properties:
+        username:
+          type: string
+        fullname:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+paths:
+  /users:
+    get:
+      summary: Get the users
+      description: Obtener todos los usuarios
+      operationId: getUsers
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref:  "#/components/schemas/user"
+        '500':
+          description: No funciona
+      tags:
+        - "User"
+  /users/{username}:
+    get:
+      summary: Get a user by username
+      description: Obtener un usuario por username
+      parameters:
+        - name: username
+          in: path
+          required: true
+          description: "username del user a buscar"
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        '500':
+          description: No funciona
+      tags:
+        - "User"
+  /users/new:
+    post:
+      tags:
+        - "User"
+      summary: Create a new user
+      description: Crea un nuevo usuario por requestBody
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user'
+      responses:
+        '201':
+          description: CREATED
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        '500':
+          description: No Funciona
+  /users/update/{username}:
+    put:
+      summary: Update users
+      description: Edita un usuario existente
+      parameters:
+        - name: username
+          in: path
+          required: true
+          description: "username del user a buscar"
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              type: object
+              properties:
+                fullname:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+      responses:
+        '200':
+          description: UPDATED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        '404':
+          description: User not found
+        '500':
+          description: No funciona
+      tags:
+        - "User"
+  /users/delete/{username}:
+    delete:
+      summary: Delete a user by username
+      description: Elimina un usuario por username
+      parameters:
+        - name: username
+          in: path
+          required: true
+          description: "username del user a eliminar"
+          schema:
+            type: "string"
+      responses:
+        '200':
+          description: DELETED
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        '404':
+          description: User not found
+        '500':
+          description: No funciona
+      tags:
+        - "User"
+
+
+
+
+
