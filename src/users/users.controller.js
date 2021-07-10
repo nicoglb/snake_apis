@@ -6,23 +6,23 @@ const getUsers = async() =>{
 
 };
 
-const getUser = (id) => {
+const getUser = async(id) => {
 
-    return usersService.getUser(id);
+    return await usersService.getUser(id);
 };
 
-const createUser = (user) => {     
-    return usersService.createUser(user);
+const createUser = async (user) => {     
+    return await usersService.createUser(user);
 }
 
-const updateUser = (id,user) => {     
-    let res = usersService.updateUser(id,user);
+const updateUser = async (id,user) => {     
+    let res = await usersService.updateUser(id,user);
     console.log(res);
-    return res
+    return res;
 }
 
-const deleteUser = (id) => {     
-    return usersService.deleteUser(id);
+const deleteUser = async (id) => {     
+    return await usersService.deleteUser(id);
 }
 
 module.exports = {getUsers, getUser, createUser, updateUser, deleteUser};

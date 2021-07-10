@@ -23,41 +23,47 @@ const getUsers = async() => {
     return await User.findAll();
 }
 
-const getUser = (id) => {
-    let user = users.find((elemento) => elemento.username === id);
-    return user;
+const getUser = async(id) => {
+  //  let user = users.find((elemento) => elemento.username === id);
+    return await User.findAll({
+        where: {
+          username: id
+        }
+      });
 }
 
-const createUser = (user) => {
-    users.push(user);
-
-    return user;
+const createUser = async (user) => {
+   // users.push(user);
+    const us = await User.create({
+        username: user.username,
+        fullname : user.fullname,
+        email: user.email,
+        password: user.password
+      });
+     
+      console.log(us); 
+    ;
 }
 
-const updateUser = (id,user) => {
-    let idx = users.findIndex(u=>u.username === id)
-    console.log(idx);
-    if (idx>=0){
-        users[idx] = {...users[idx],...user}
-        return users[idx]
-    }
-    else{
-        return undefined
-    }
-
-    
+const updateUser = async (id,user) => {
+    return  await User.update({ 
+        fullname : user.fullname,
+        email: user.email,
+        password: user.password
+       }, {
+        where: {
+            username: id
+        }
+      });
+     
 }
 
-const deleteUser = (id) => {
-    let idx = users.findIndex(u=>u.username === id)
-    let user;
-    console.log(`idx user a eliminar ${idx}`);
-
-    if (idx >= 0) {
-      user = users.splice(idx, 1)[0]; //[0] porque splice me retorna un array y accedo al que saque
-    }
-
-    return user
+const deleteUser = async(id) => {
+  return await User.destroy({
+        where: {
+          username: id
+        }
+      });
 }
 
 module.exports = { getUsers, getUser, createUser, updateUser, deleteUser };

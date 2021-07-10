@@ -26,9 +26,14 @@ router.get('/', (req, res) => {
 router.get('/:username', (req, res) => {
     let id = req.params.username;
     try {
-        let encontrado = controller.getUser(id);
-        res.status(200);
-        res.send(encontrado);
+        controller.getUser(id).then 
+        ((users) => {
+            res.status(200);
+            res.send(users);
+        }
+        ).catch((eror) => {
+            res.sendStatus(500);
+        });
 
     } catch (error) {
         console.log(error);
@@ -41,9 +46,17 @@ router.post('/new', (req, res) => {
     const user = req.body;
     //console.log(user);
     try {
-        let nuevo = controller.createUser(user);
-        res.status(200);
-        res.send(nuevo);
+        let nuevo = controller.createUser(user).then 
+        ((users) => {
+            res.status(200);
+            res.send(nuevo);
+        }
+        ).catch((error) => {
+            console.log(error);
+            res.sendStatus(500);
+
+        });
+       
     } catch (error) {
         console.log(error);
         res.sendStatus(500);
@@ -56,16 +69,16 @@ router.put('/update/:username', (req, res) => {
     const user = req.body;
     console.log(user);
     try {
-        let modificado = controller.updateUser(id, user);
-        if (modificado) {
+        let modificado = controller.updateUser(id, user).then 
+        ((users) => {
             res.status(200);
             res.send(modificado);
         }
-        else {
-            res.sendStatus(404)
-            //preguntar a Adri o ver documentacion
-            //Fer manda res.json
-        }
+        ).catch((error) => {
+            console.log(error);
+            res.sendStatus(500);
+
+        });
 
     } catch (error) {
         console.log(error);
@@ -77,14 +90,16 @@ router.put('/update/:username', (req, res) => {
 router.delete('/delete/:username', (req, res) => {
     let id = req.params.username;
     try {
-        let eliminado = controller.deleteUser(id);
-        if (eliminado) {
+        let eliminado = controller.deleteUser(id).then 
+        ((users) => {
             res.status(200);
             res.send(eliminado);
         }
-        else {
-            res.sendStatus(404); //eliminado===undefined significa que no lo encontre, devuelvo 404
-        }
+        ).catch((error) => {
+            console.log(error);
+            res.sendStatus(500);
+
+        });
 
     } catch (error) {
         console.log(error);
