@@ -1,4 +1,7 @@
-const users = [{
+const {User}= require('./users.entity');
+
+
+/* const users = [{
     username: 'nico',
     fullname: 'Nicolas',
     email: 'nico@mail.com',
@@ -14,10 +17,10 @@ const users = [{
     fullname: 'Gabriela',
     email: 'gabi@mail.com',
     password: '123'
-}]
+}] */
 
-const getUsers = () => {
-    return users;
+const getUsers = async() => {
+    return await User.findAll();
 }
 
 const getUser = (id) => {

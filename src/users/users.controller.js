@@ -1,8 +1,8 @@
 const usersService = require('./users.service');
 
-const getUsers = () =>{
+const getUsers = async() =>{
 
-    return usersService.getUsers();
+    return await usersService.getUsers();
 
 };
 
