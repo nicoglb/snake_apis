@@ -5,14 +5,14 @@ const controller = require('./users.controller');
 
 router.get('/', (req, res) => {
     try {
-        //let users  = getUsers();
-        // let users = controller.getUsers();
+        //let users  = getUsers(); eso si usamos el otro require
+        //let users = controller.getUsers();
         //en rutas lo manejamos como una promesa
         controller.getUsers().then((users) => {
             res.status(200);
             res.send(users);
         }
-        ).catch((eror) => {
+        ).catch((error) => {
             res.sendStatus(500);
         });
 
@@ -26,14 +26,24 @@ router.get('/', (req, res) => {
 router.get('/:username', (req, res) => {
     let id = req.params.username;
     try {
-        controller.getUser(id).then 
-        ((users) => {
-            res.status(200);
-            res.send(users);
-        }
-        ).catch((eror) => {
-            res.sendStatus(500);
-        });
+        //let encontrado = controller.getUser(id);
+        controller.getUser(id).then
+            ((encontrado) => {
+                if (encontrado){
+                    console.log( 'routes: '+ JSON.stringify(encontrado));
+                    res.status(200);
+                    res.send(JSON.stringify(encontrado));
+                }
+                else {
+                    res.status(404);
+                    res.send('No encontrado');
+                }
+
+                
+            }
+            ).catch((error) => {
+                res.sendStatus(500);
+            });
 
     } catch (error) {
         console.log(error);
@@ -46,17 +56,18 @@ router.post('/new', (req, res) => {
     const user = req.body;
     //console.log(user);
     try {
-        let nuevo = controller.createUser(user).then 
-        ((users) => {
-            res.status(200);
-            res.send(nuevo);
-        }
-        ).catch((error) => {
-            console.log(error);
-            res.sendStatus(500);
+        //let nuevo = controller.createUser(user);
+        controller.createUser(user).then
+            ((nuevo) => {
+                res.status(200);
+                res.send(nuevo);
+            }
+            ).catch((error) => {
+                console.log(error);
+                res.sendStatus(500);
 
-        });
-       
+            });
+
     } catch (error) {
         console.log(error);
         res.sendStatus(500);
@@ -69,16 +80,21 @@ router.put('/update/:username', (req, res) => {
     const user = req.body;
     console.log(user);
     try {
-        let modificado = controller.updateUser(id, user).then 
-        ((users) => {
-            res.status(200);
-            res.send(modificado);
-        }
-        ).catch((error) => {
-            console.log(error);
-            res.sendStatus(500);
+        //let modificado = controller.updateUser(id,user);
+        controller.updateUser(id, user).then
+            ((modificado) => {
+                if (modificado) {
+                    res.status(200);
+                    res.send(modificado);
+                }
+                else
+                    res.sendStatus(404)
+            }
+            ).catch((error) => {
+                console.log(error);
+                res.sendStatus(500);
 
-        });
+            });
 
     } catch (error) {
         console.log(error);
@@ -90,16 +106,22 @@ router.put('/update/:username', (req, res) => {
 router.delete('/delete/:username', (req, res) => {
     let id = req.params.username;
     try {
-        let eliminado = controller.deleteUser(id).then 
-        ((users) => {
-            res.status(200);
-            res.send(eliminado);
-        }
-        ).catch((error) => {
-            console.log(error);
-            res.sendStatus(500);
+        //let eliminado = controller.deleteUser(id);
+        controller.deleteUser(id).then
+            ((eliminado) => {
+                if (eliminado) {
+                    res.status(200);
+                    res.send(eliminado);
+                }
+                else{
+                    res.sendStatus(404); //eliminado===undefined significa que no lo encontre, devuelvo 404
+                }
+            }
+            ).catch((error) => {
+                console.log(error);
+                res.sendStatus(500);
 
-        });
+            });
 
     } catch (error) {
         console.log(error);

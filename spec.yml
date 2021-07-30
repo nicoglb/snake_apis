@@ -6,6 +6,7 @@ servers:
   - url: http://localhost:3000/v1
 tags:
   - name: User
+  - name: Score
 components:
   schemas:
     user:
@@ -21,6 +22,24 @@ components:
         password:
           type: string
           format: password
+    userScores:
+      type: object
+      properties:
+        username: 
+          type: string
+        scores:
+          $ref:  "#/components/schemas/scores" 
+    scores:
+      type: array
+      items: 
+        type: object
+        properties:
+          date:
+            type: string
+            format: date-time
+          score:
+            type: integer
+            format: int32    
 paths:
   /users:
     get:
@@ -48,7 +67,7 @@ paths:
         - name: username
           in: path
           required: true
-          description: "username del user a buscar"
+          description: "username a buscar"
           schema:
             type: string
       responses:
@@ -85,13 +104,13 @@ paths:
           description: No Funciona
   /users/update/{username}:
     put:
-      summary: Update users
+      summary: Update user
       description: Edita un usuario existente
       parameters:
         - name: username
           in: path
           required: true
-          description: "username del user a buscar"
+          description: "username a buscar"
           schema:
             type: string
       requestBody:
@@ -130,7 +149,7 @@ paths:
         - name: username
           in: path
           required: true
-          description: "username del user a eliminar"
+          description: "username a eliminar"
           schema:
             type: "string"
       responses:
@@ -146,6 +165,161 @@ paths:
           description: No funciona
       tags:
         - "User"
+  /score:
+    get:
+      summary: Get the scores of all users
+      description: Obtener el puntaje de todos los usuarios
+      operationId: getScore
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: "#/components/schemas/userScores"
+        '500':
+          description: No funciona
+      tags:
+        - "Score"
+  /score/{username}:
+    get:
+      summary: Get the scores of user
+      description: Obtener todos los puntajes de un usuario
+      parameters:
+        - name: username
+          in: path
+          required: true
+          description: "username a buscar"
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/scores'
+        '500':
+          description: No funciona
+      tags:
+        - "Score"
+  /score/new/{username}:
+    put:
+      summary: Update the score list with a new one
+      description: Agrega al listado de puntajes de username uno nuevo
+      parameters:
+        - name: username
+          in: path
+          required: true
+          description: "username a buscar"
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              type: object
+              properties:
+                date:
+                  type: string
+                  format: date-time
+                score:
+                  type: integer
+                  format: int32  
+      responses:
+        '200':
+          description: UPDATED
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/userScores"
+        '404':
+          description: User not found
+        '500':
+          description: No funciona
+      tags:
+        - "Score"
+  /score/max/{username}:
+    get:
+      summary: Get the max score of user
+      description: Obtener el mejor puntaje de un usuario
+      parameters:
+        - name: username
+          in: path
+          required: true
+          description: "username a buscar"
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  date:
+                    type: string
+                    format: date-time
+                  score:
+                    type: integer
+                    format: int32
+        '500':
+          description: No funciona
+      tags:
+        - "Score"
+  /score/last/{username}:
+    get:
+      summary: Get the last score of user
+      description: Obtener el ultimo puntaje de un usuario
+      parameters:
+        - name: username
+          in: path
+          required: true
+          description: "username a buscar"
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  date:
+                    type: string
+                    format: date-time
+                  score:
+                    type: integer
+                    format: int32
+        '500':
+          description: No funciona
+      tags:
+        - "Score"
+  /score/ranking:
+    get:
+      summary: Get the best score of all users
+      description: Obtener el mejor puntaje de todos los usuarios
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: "#/components/schemas/userScores"
+        '500':
+          description: No funciona
+      tags:
+        - "Score"
+
+
+
 
 
 
