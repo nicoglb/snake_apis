@@ -29,7 +29,7 @@ const initMySql = async (login) => {
     }
 
 }
-/* var user = prompt('Ingrese usuario DB: ')
+var user = prompt('Ingrese usuario DB: ')
 var pass = prompt('Ingrese clave: ',{echo: '*'})
-initMySql({ username: user, password: pass });  */
-initMySql({ username: 'nico', password: '12345' });
+initMySql({ username: user, password: pass });  
+//initMySql({ username: 'nico', password: '12345' });
