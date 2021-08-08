@@ -81,7 +81,7 @@ router.put('/update/:username', (req, res) => {
     console.log(user);
     try {
         //let modificado = controller.updateUser(id,user);
-        controller.updateUser(id, user).then
+      controller.updateUser(id, user).then
             ((modificado) => {
                 if (modificado) {
                     res.status(200);

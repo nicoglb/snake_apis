@@ -30,7 +30,9 @@ const getUser = async (id) => {
   return await User.findAll({
     where: {
       username: id
-    }
+    },
+    raw : true , 
+    nest : true 
   });
   //return user;
 }
