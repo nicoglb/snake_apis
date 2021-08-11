@@ -44,10 +44,14 @@ const getLastUserScore = async (user) => {
 
 }
 
-const putUserScore = async (user, score) => {
+const postUserScore = async (score) => {
 
-    return await scoreService.updateUserScores(user, score)
+    return await scoreService.newUserScores(score)
 
 }
 
-module.exports = { getAllScores, getUserScores, getMaxUserScore, getLastUserScore, putUserScore }
+const getRanking = async()=>{
+    return await scoreService.rankingScore();
+}
+
+module.exports = { getAllScores, getUserScores, getMaxUserScore, getLastUserScore, postUserScore,getRanking }

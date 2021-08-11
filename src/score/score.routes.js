@@ -4,6 +4,21 @@ const scoreController = require('./score.controller')
 
 router.get('/', scoreController.getAllScores);
 
+router.get('/ranking',(req,res)=>{
+
+    scoreController.getRanking()
+    .then((ranking) => {
+        res.status(200);
+        res.send(JSON.stringify(ranking));
+    })
+    .catch((error) => {
+        //res.send(error)
+        console.log(error);
+        res.sendStatus(500);
+    })
+})
+
+
 router.get('/:username', (req, res) => {
     const username = req.params.username
     //res.send(scoreController.getUserScores(username))
@@ -26,12 +41,12 @@ router.get('/:username', (req, res) => {
         })
 })
 
-router.put('/:username', (req, res) => {
-    const username = req.params.username
+router.post('/new', (req, res) => {
+    //const username = req.params.username
     const score = req.body;
     //console.log(score);
     //res.send(scoreController.putUserScore(username, score))
-    scoreController.putUserScore(username,score)
+    scoreController.postUserScore(score)
         .then((UserScore) => {
             if (UserScore) {
                 //console.log(UserScores);
@@ -39,7 +54,7 @@ router.put('/:username', (req, res) => {
                 res.send(JSON.stringify(UserScore));
             } else {
                 res.status(404);
-                res.send(`Username: ${username} Not Found`);
+                res.send(`Username: ${score.username} Not Found`);
             }
         })
         .catch((error) => {
@@ -68,5 +83,7 @@ router.get('/last/:username', (req, res) => {
             res.sendStatus(500);
         })
 })
+
+
 
 module.exports = router;

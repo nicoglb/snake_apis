@@ -69,10 +69,10 @@ const getLastUserScore = async(user) => {
       
 }
 
-const updateUserScores = async(user,score) => {
+const newUserScores = async(score) => {
      
-    await UserScore.create({
-        username: user,
+    const nuevo = await UserScore.create({
+        username: score.username,
         date: score.date,
         score: score.score,
       });
@@ -88,8 +88,26 @@ const updateUserScores = async(user,score) => {
     else 
         return undefined */
 
-    
+    //console.log(nuevo);
+    return nuevo
 
 }
 
-module.exports = {getScoreList,getUserScores,getMaxUserScore,getLastUserScore,updateUserScores};
+const rankingScore = async() =>{
+
+    const ranking = await UserScore.findAll({
+        attributes: [[Sequelize.fn('distinct', Sequelize.col('username')) ,'username'],'score','date'],
+        where: {
+            score: [Sequelize.literal('(SELECT MAX(s1.score) FROM scores s1 WHERE s1.username = scores.username)')]
+          },
+          order: [
+            ['score', 'DESC']
+          ]
+        });
+    
+    console.log(ranking);
+    return ranking;
+
+}
+
+module.exports = {getScoreList,getUserScores,getMaxUserScore,getLastUserScore,newUserScores, rankingScore};

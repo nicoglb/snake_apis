@@ -27,19 +27,12 @@ components:
       properties:
         username: 
           type: string
-        scores:
-          $ref:  "#/components/schemas/scores" 
-    scores:
-      type: array
-      items: 
-        type: object
-        properties:
-          date:
-            type: string
-            format: date-time
-          score:
-            type: integer
-            format: int32    
+        date:
+          type: string
+          format: date-time
+        score:
+          type: integer
+          format: int32    
 paths:
   /users:
     get:
@@ -200,38 +193,33 @@ paths:
           content: 
             application/json:
               schema:
-                $ref: '#/components/schemas/scores'
+                type: array
+                items:
+                  type: object
+                  properties:
+                    date:
+                      type: string
+                      format: date-time
+                    score:
+                      type: integer
+                      format: int32
         '500':
           description: No funciona
       tags:
         - "Score"
-  /score/new/{username}:
-    put:
-      summary: Update the score list with a new one
+  /score/new:
+    post:
+      summary: Add new score
       description: Agrega al listado de puntajes de username uno nuevo
-      parameters:
-        - name: username
-          in: path
-          required: true
-          description: "username a buscar"
-          schema:
-            type: string
       requestBody:
         required: true
         content: 
           application/json:
             schema:
-              type: object
-              properties:
-                date:
-                  type: string
-                  format: date-time
-                score:
-                  type: integer
-                  format: int32  
+              $ref: '#/components/schemas/userScores'
       responses:
         '200':
-          description: UPDATED
+          description: OK
           content:
             application/json:
               schema:
