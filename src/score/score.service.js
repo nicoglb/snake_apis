@@ -33,7 +33,7 @@ const scoreList = [{
 const getScoreList = async() =>{
     //return scoreList
     //console.log(await UserScore.findAll());
-    return await UserScore.findAll();
+    return await (await UserScore.findAll());
 }
 
 const getUserScores = async(user) => {
@@ -60,13 +60,21 @@ const getMaxUserScore = async(user) => {
 }
 
 const getLastUserScore = async(user) => {
-    return await UserScore.findAll({
-        attributes: [[Sequelize.fn('max', Sequelize.col('date')), 'date'], 'score'],
-        where: {
-            username: user
-          }
-      });
-      
+      return await UserScore.findOne({
+         attributes: ['date', 'score'],
+              where: {
+                  username: user
+                },
+          order: [ ['date', 'DESC']]
+             });  
+
+    //  return await UserScore.findAll({
+    //    attributes: [[Sequelize.fn('max', Sequelize.col('date')), 'date'], 'score'],
+    //      where: {
+    //          username: user
+    //        }
+    //    });   
+
 }
 
 const newUserScores = async(score) => {
@@ -96,16 +104,20 @@ const newUserScores = async(score) => {
 const rankingScore = async() =>{
 
     const ranking = await UserScore.findAll({
-        attributes: [[Sequelize.fn('distinct', Sequelize.col('username')) ,'username'],'score','date'],
-        where: {
-            score: [Sequelize.literal('(SELECT MAX(s1.score) FROM scores s1 WHERE s1.username = scores.username)')]
-          },
-          order: [
-            ['score', 'DESC']
-          ]
+
+        group: ['username'],
+        attributes: [[Sequelize.fn('max', Sequelize.col('score')), 'score'], 'username'],
+        order: [ ['score', 'DESC']]
+      //  [[Sequelize.fn('distinct', Sequelize.col('username')) ,'username'],'score','date'],
+      //  where: {
+        //    score:  [Sequelize.literal('(SELECT MAX(s1.score) FROM scores s1 WHERE s1.username = scores.username)')]
+          //},
+         // order: [
+           // ['score', 'DESC']
+         // ]
         });
     
-    console.log(ranking);
+    console.log('rankinng ' +JSON.stringify(ranking));
     return ranking;
 
 }

@@ -39,14 +39,14 @@ const getUser = async (id) => {
 
 const createUser = async (user) => {
   // users.push(user);
-  const us = await User.create({
+  return await User.create({
     username: user.username,
     fullname: user.fullname,
     email: user.email,
     password: user.password
   });
 
-  console.log(us);
+ // console.log(us);
   //return user;    
 }
 

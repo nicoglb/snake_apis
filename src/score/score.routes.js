@@ -60,7 +60,7 @@ router.post('/new', (req, res) => {
         .catch((error) => {
             //res.send(error)
             console.log(error);
-            res.sendStatus(500);
+             res.sendStatus(500);
         })
 
 

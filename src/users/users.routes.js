@@ -60,7 +60,8 @@ router.post('/new', (req, res) => {
         controller.createUser(user).then
             ((nuevo) => {
                 res.status(200);
-                res.send(nuevo);
+                res.send(JSON.stringify(nuevo));
+                console.log('usuario creado: '+JSON.stringify(nuevo));
             }
             ).catch((error) => {
                 console.log(error);

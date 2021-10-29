@@ -5,6 +5,7 @@ const getAllScores = (req, res) => {
 
     scoreService.getScoreList()
         .then((scoreList) => {
+            console.log('RANKING: '+scoreList)
             res.status(200);
             res.send(scoreList)
         })
